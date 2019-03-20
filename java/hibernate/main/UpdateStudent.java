@@ -16,6 +16,8 @@ import javax.persistence.criteria.Root;
 public class UpdateStudent {
     public static void main(String[] args) {
 
+        int id = 5;
+
         // create session
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -33,32 +35,37 @@ public class UpdateStudent {
             // create root
             Root<Student> root = criteria.from(Student.class);
 
-            // create query to retrieve student with id = 5
+            // create query to retrieve student with a specific ID
             criteria.select(root);
-            criteria.where(builder.equal(root.get("id"), 5));
+            criteria.where(builder.equal(root.get("id"), id));
             Query<Student> query = session.createQuery(criteria);
 
-            System.out.println(">> Getting student with id 5: ");
+            System.out.println(">> Getting student with id "+ id +": ");
             // get the list of students that fulfill the criteria
             Student student = query.uniqueResult();
 
-            // print the student
-            System.out.println(student);
+            if(student != null) {
+                // print the student
+                System.out.println(student);
 
-            // update the student
-            System.out.println(">> updating the student... ");
-            student.setFirstName("Sona");
-            student.setEmail("sona@gmail.se");
-            session.update(student);
+                // update the student
+                System.out.println(">> updating the student... ");
+                student.setFirstName("Sona");
+                student.setEmail("sona@gmail.se");
+                session.update(student);
 
-            // commit changes
-            transaction.commit();
+                // commit changes
+                transaction.commit();
 
-            // print the student updated
-            System.out.println(">> Student updated: ");
-            System.out.println(student);
+                // print the student updated
+                System.out.println(">> Student updated: ");
+                System.out.println(student);
 
-            System.out.println(">> DONE!!");
+                System.out.println(">> DONE!!");
+            }
+            else{
+                System.out.println(">> THERE IS RECORD FOR THE ID NUMBER " + id);
+            }
         }catch(Throwable t){
             System.out.println(">> ERROR!!");
             System.out.println(t.getLocalizedMessage());
