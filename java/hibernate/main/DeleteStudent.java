@@ -15,6 +15,8 @@ import javax.persistence.criteria.Root;
  */
 public class DeleteStudent {
     public static void main(String[] args) {
+        int id = 5;
+
         // create session
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -32,27 +34,31 @@ public class DeleteStudent {
             // create root
             Root<Student> root = criteria.from(Student.class);
 
-            // create query to retrieve student with id = 5
+            // create query to retrieve student with a specific ID
             criteria.select(root);
-            criteria.where(builder.equal(root.get("id"), 5));
+            criteria.where(builder.equal(root.get("id"), id));
             Query<Student> query = session.createQuery(criteria);
 
-            System.out.println(">> Getting student with id 5... ");
+            System.out.println(">> Getting student with id "+ id +": ");
             // get the list of students that fulfill the criteria
             Student student = query.uniqueResult();
+            if(student != null) {
+                // delete the student
+                System.out.println(">> Deleting student with id "+ id +": ");
+                session.delete(student);
 
-            // delete the student
-            System.out.println(">> Deleting student with id 5... ");
-            session.delete(student);
+                // commit changes
+                transaction.commit();
 
-            // commit changes
-            transaction.commit();
+                // print the student deleted
+                System.out.println(">> Student deleted: ");
+                System.out.println(student);
 
-            // print the student deleted
-            System.out.println(">> Student deleted: ");
-            System.out.println(student);
-
-            System.out.println(">> DONE!!");
+                System.out.println(">> DONE!!");
+            }
+            else{
+                System.out.println(">> THERE IS NO RECORD FOR THE ID NUMBER " + id);
+            }
         }catch(Exception e){
             System.out.println(">> ERROR!!");
             System.out.println(e.getMessage());

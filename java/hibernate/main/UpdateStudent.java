@@ -64,7 +64,7 @@ public class UpdateStudent {
                 System.out.println(">> DONE!!");
             }
             else{
-                System.out.println(">> THERE IS RECORD FOR THE ID NUMBER " + id);
+                System.out.println(">> THERE IS NO RECORD FOR THE ID NUMBER " + id);
             }
         }catch(Throwable t){
             System.out.println(">> ERROR!!");
